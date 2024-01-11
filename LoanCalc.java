@@ -57,20 +57,19 @@ public class LoanCalc {
 	* Given: the sum of theloan, the periodical interest rate (as a percentage),
 	* the number of periods (n), and epsilon, a tolerance level.
 	*/
-	// Side effect: modifies the class variable iterationCounter.
-    public static double bisectionSolver(double loan, double rate, int n, double epsilon) {  
-    	double lo = 0;
-		double hi = loan / 4;
-		double g = (lo + hi)/2;
+	public static double bisectionSolver(double loan, double rate, int n, double epsilon) {  
+    	double low = 0;
+		double high = loan / 4;
+		double g = (low + high)/2;
 		iterationCounter = 0;
 		double end = 100;
 		while (Math.abs(end) > epsilon){
-			g = (lo + hi) / 2;
+			g = (low + high) / 2;
 			end = endBalance(loan, rate, n, g);
 			if (end > 0)
-			lo = g;
+			low = g;
 			else
-			hi = g;
+			high = g;
 			iterationCounter++;
 		}
     	return g;
@@ -82,9 +81,11 @@ public class LoanCalc {
 	*/
 	private static double endBalance(double loan, double rate, int n, double payment) {
 		double currentloan = loan;
+		double nextBal = 0;
 		for (int i =0; i<n; i++){
-			currentloan = (double)(currentloan -payment) * (1 + rate / 100);
+			nextBal = (int)(currentloan -payment) * (1 + rate / 100);
+			currentloan = nextBal;
 		}
     	return currentloan;
-	}
+}
 }
