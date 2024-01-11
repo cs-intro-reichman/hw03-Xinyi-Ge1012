@@ -58,20 +58,24 @@ public class LoanCalc {
 	* the number of periods (n), and epsilon, a tolerance level.
 	*/
 	public static double bisectionSolver(double loan, double rate, int n, double epsilon) {  
-    	double low = 0;
-		double high = loan / 4;
-		double g = (low + high)/2;
+    	double low = loan / n;
+		double high = loan;
+		double g = 0;
 		iterationCounter = 0;
-		double end = 100;
-		while (Math.abs(end) > epsilon){
+		while(high-low > epsilon){
 			g = (low + high) / 2;
-			end = endBalance(loan, rate, n, g);
-			if (end > 0)
-			low = g;
-			else
-			high = g;
-			iterationCounter++;
-		}
+			double end = endBalance(loan, rate, n, g);
+			if (Math.abs(end) <= epsilon){
+				break;
+			} else if (end > 0){
+				low = g;
+		   }else{
+				high = g;
+		     }
+				iterationCounter++;
+		} 
+		
+		
     	return g;
     }
 	
@@ -83,7 +87,7 @@ public class LoanCalc {
 		double currentloan = loan;
 		double nextBal = 0;
 		for (int i =0; i<n; i++){
-			nextBal = (int)(currentloan -payment) * (1 + rate / 100);
+			nextBal = (currentloan -payment) * (1 + rate / 100);
 			currentloan = nextBal;
 		}
     	return currentloan;
